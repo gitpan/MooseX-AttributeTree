@@ -2,19 +2,50 @@
 use strict;
 use warnings;
 
-use ExtUtils::MakeMaker;
+ BEGIN { require 5.8.0; } 
 
-WriteMakefile(
-  DISTNAME  => 'MooseX-AttributeTree',
-  NAME      => 'MooseX::AttributeTree',
-  AUTHOR    => "Christopher\ J\.\ Madsen\ \<perl\@cjmweb\.net\>",
-  ABSTRACT  => "Inherit\ attribute\ values\ like\ HTML\+CSS\ does",
-  VERSION   => '0.01',
-  EXE_FILES => [ qw() ],
-  (eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => 'perl') : ()),
-  PREREQ_PM    => {
-    "MooseX::Role::Parameterized" => '0',
+use ExtUtils::MakeMaker 6.31;
+
+
+
+my %WriteMakefileArgs = (
+  'ABSTRACT' => 'Inherit attribute values like HTML+CSS does',
+  'AUTHOR' => 'Christopher J. Madsen <perl@cjmweb.net>',
+  'BUILD_REQUIRES' => {},
+  'CONFIGURE_REQUIRES' => {
+    'ExtUtils::MakeMaker' => '6.31'
   },
-  test => {TESTS => 't/*.t'}
+  'DISTNAME' => 'MooseX-AttributeTree',
+  'EXE_FILES' => [],
+  'LICENSE' => 'perl',
+  'NAME' => 'MooseX::AttributeTree',
+  'PREREQ_PM' => {
+    'MooseX::Role::Parameterized' => '0'
+  },
+  'VERSION' => '0.02',
+  'test' => {
+    'TESTS' => 't/*.t'
+  }
 );
+
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
+  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
+  my $pp = $WriteMakefileArgs{PREREQ_PM}; 
+  for my $mod ( keys %$br ) {
+    if ( exists $pp->{$mod} ) {
+      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod}; 
+    }
+    else {
+      $pp->{$mod} = $br->{$mod};
+    }
+  }
+}
+
+delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+WriteMakefile(%WriteMakefileArgs);
+
+
 

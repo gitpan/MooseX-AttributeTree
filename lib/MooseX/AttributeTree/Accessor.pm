@@ -17,7 +17,7 @@ package MooseX::AttributeTree::Accessor;
 # ABSTRACT: Moose accessor role for inheritance through the object tree
 #---------------------------------------------------------------------
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use MooseX::Role::Parameterized;
 
@@ -27,8 +27,22 @@ parameter qw(parent_link
   required 1
 );
 
+parameter qw(fetch_method
+  is       ro
+  isa      Maybe[Str]
+  required 1
+);
+
+parameter qw(default
+  is       ro
+  isa      Maybe[Value|CodeRef]
+  required 1
+);
+
 role {
-  my $parent_link = (shift)->parent_link;
+  my $parent_link  = $_[0]->parent_link;
+  my $fetch_method = $_[0]->fetch_method;
+  my $default      = $_[0]->default;
 
   # I haven't created inline versions of the methods yet:
   method 'is_inline' => sub { 0 };
@@ -45,9 +59,17 @@ role {
         my $class = $attr->associated_class;
         my $parent = $class->find_attribute_by_name($parent_link)
                            ->get_value($_[0]);
-        return undef unless $parent;
-        my $method = $attr->get_read_method;
-        return $parent->$method;
+        my $result;
+        if ($parent) {
+          if ($fetch_method) {
+            $result    = $parent->$fetch_method($attr->name);
+          } else {
+            my $method = $attr->get_read_method;
+            $result    = $parent->$method;
+          }
+        } # end if $parent
+        return (defined $result ? $result :
+                ref $default ? $_[0]->$default : $default);
       } # end else this object has no value for the attribute
     } # end anonymous accessor sub
   }; # end _generate_accessor_method
@@ -65,9 +87,17 @@ role {
         my $class = $attr->associated_class;
         my $parent = $class->find_attribute_by_name($parent_link)
                            ->get_value($_[0]);
-        return undef unless $parent;
-        my $method = $attr->get_read_method;
-        return $parent->$method;
+        my $result;
+        if ($parent) {
+          if ($fetch_method) {
+            $result    = $parent->$fetch_method($attr->name);
+          } else {
+            my $method = $attr->get_read_method;
+            $result    = $parent->$method;
+          }
+        } # end if $parent
+        return (defined $result ? $result :
+                ref $default ? $_[0]->$default : $default);
       } # end else this object has no value for the attribute
     } # end anonymous reader sub
   }; # end _generate_reader_method
@@ -87,9 +117,9 @@ MooseX::AttributeTree::Accessor - Moose accessor role for inheritance through th
 
 =head1 VERSION
 
-This document describes version 0.01 of
-MooseX::AttributeTree::Accessor, released October 20, 2009
-as part of MooseX-AttributeTree version 0.01.
+This document describes version 0.02 of
+MooseX::AttributeTree::Accessor, released June 19, 2010
+as part of MooseX-AttributeTree version 0.02.
 
 =head1 DESCRIPTION
 
@@ -98,16 +128,19 @@ the C<TreeInherit> trait.  See L<MooseX::AttributeTree> for details.
 
 =head1 AUTHOR
 
-Christopher J. Madsen  S<< C<< <perl AT cjmweb.net> >> >>
+Christopher J. Madsen  S<C<< <perl AT cjmweb.net> >>>
 
 Please report any bugs or feature requests to
-S<< C<< <bug-MooseX-AttributeTree AT rt.cpan.org> >> >>,
+S<C<< <bug-MooseX-AttributeTree AT rt.cpan.org> >>>,
 or through the web interface at
 L<http://rt.cpan.org/Public/Bug/Report.html?Queue=MooseX-AttributeTree>
 
+You can follow or contribute to MooseX-AttributeTree's development at
+L<< http://github.com/madsen/moosex-attributetree >>.
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2009 by Christopher J. Madsen.
+This software is copyright (c) 2010 by Christopher J. Madsen.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
