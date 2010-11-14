@@ -1,4 +1,4 @@
-MooseX-AttributeTree version 0.02, released June 19, 2010
+MooseX-AttributeTree version 0.03, released November 14, 2010
 
 This module provides inheritance of attribute values based on object
 relationhips (instead of class relationhips), similar to how CSS
@@ -31,11 +31,11 @@ This module requires the MooseX::Role::Parameterized module from CPAN.
 
 
 CHANGES
-    Here's what's new in version 0.02 of MooseX-AttributeTree:
+    Here's what's new in version 0.03 of MooseX-AttributeTree:
     (See the file "Changes" for the full revision history.)
 
-	- Added fetch_method & default attributes
-	- Now has tests
+	- Generated accessor methods are faster
+	- parent_link is now a method name, not necessarily an attribute
 
 
 

@@ -17,7 +17,7 @@ package MooseX::AttributeTree::Accessor;
 # ABSTRACT: Moose accessor role for inheritance through the object tree
 #---------------------------------------------------------------------
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use MooseX::Role::Parameterized;
 
@@ -49,6 +49,9 @@ role {
 
   method '_generate_accessor_method' => sub {
     my $attr = (shift)->associated_attribute;
+    my ($method, @args) = $fetch_method
+        ? ($fetch_method, $attr->name)
+        : ($attr->get_read_method);
 
     return sub {
       $attr->set_value($_[0], $_[1]) if scalar(@_) == 2;
@@ -56,17 +59,9 @@ role {
       if ($attr->has_value($_[0])) {
         return $attr->get_value($_[0]);
       } else {
-        my $class = $attr->associated_class;
-        my $parent = $class->find_attribute_by_name($parent_link)
-                           ->get_value($_[0]);
         my $result;
-        if ($parent) {
-          if ($fetch_method) {
-            $result    = $parent->$fetch_method($attr->name);
-          } else {
-            my $method = $attr->get_read_method;
-            $result    = $parent->$method;
-          }
+        if (my $parent = $_[0]->$parent_link) {
+          $result = $parent->$method(@args);
         } # end if $parent
         return (defined $result ? $result :
                 ref $default ? $_[0]->$default : $default);
@@ -76,6 +71,9 @@ role {
 
   method '_generate_reader_method' => sub {
     my $attr = (shift)->associated_attribute;
+    my ($method, @args) = $fetch_method
+        ? ($fetch_method, $attr->name)
+        : ($attr->get_read_method);
 
     return sub {
       $attr->throw_error('Cannot assign a value to a read-only accessor',
@@ -84,17 +82,9 @@ role {
       if ($attr->has_value($_[0])) {
         return $attr->get_value($_[0]);
       } else {
-        my $class = $attr->associated_class;
-        my $parent = $class->find_attribute_by_name($parent_link)
-                           ->get_value($_[0]);
         my $result;
-        if ($parent) {
-          if ($fetch_method) {
-            $result    = $parent->$fetch_method($attr->name);
-          } else {
-            my $method = $attr->get_read_method;
-            $result    = $parent->$method;
-          }
+        if (my $parent = $_[0]->$parent_link) {
+          $result = $parent->$method(@args);
         } # end if $parent
         return (defined $result ? $result :
                 ref $default ? $_[0]->$default : $default);
@@ -117,9 +107,9 @@ MooseX::AttributeTree::Accessor - Moose accessor role for inheritance through th
 
 =head1 VERSION
 
-This document describes version 0.02 of
-MooseX::AttributeTree::Accessor, released June 19, 2010
-as part of MooseX-AttributeTree version 0.02.
+This document describes version 0.03 of
+MooseX::AttributeTree::Accessor, released November 14, 2010
+as part of MooseX-AttributeTree version 0.03.
 
 =head1 DESCRIPTION
 
@@ -136,7 +126,7 @@ or through the web interface at
 L<http://rt.cpan.org/Public/Bug/Report.html?Queue=MooseX-AttributeTree>
 
 You can follow or contribute to MooseX-AttributeTree's development at
-L<< http://github.com/madsen/moosex-attributetree >>.
+git://github.com/madsen/moosex-attributetree.git.
 
 =head1 COPYRIGHT AND LICENSE
 

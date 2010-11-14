@@ -17,7 +17,7 @@ package MooseX::AttributeTree;
 # ABSTRACT: Inherit attribute values like HTML+CSS does
 #---------------------------------------------------------------------
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 use MooseX::Role::Parameterized;
@@ -81,9 +81,9 @@ MooseX::AttributeTree - Inherit attribute values like HTML+CSS does
 
 =head1 VERSION
 
-This document describes version 0.02 of
-MooseX::AttributeTree, released June 19, 2010
-as part of MooseX-AttributeTree version 0.02.
+This document describes version 0.03 of
+MooseX::AttributeTree, released November 14, 2010
+as part of MooseX-AttributeTree version 0.03.
 
 =head1 SYNOPSIS
 
@@ -123,10 +123,10 @@ accessor method, but it doesn't have to be.)  If the parent doesn't
 have the right method, you'll get a runtime error if the child tries
 to call it.
 
-By default, MooseX::AttributeTree expects the link to the parent
-object to be stored in the C<parent> attribute.  However, you can use
-any attribute as the link by passing the appropriate C<parent_link> to
-the C<TreeInherit> trait:
+By default, MooseX::AttributeTree expects to get the parent object by
+calling the object's C<parent> method.  However, you can use any
+method to retrieve the link by passing the appropriate C<parent_link>
+to the C<TreeInherit> trait:
 
   has ancestor => (
     is       => 'rw',
@@ -139,8 +139,9 @@ the C<TreeInherit> trait:
     traits => [ TreeInherit => { parent_link => 'ancestor' } ],
   );
 
-If the parent attribute is not set (or is undef), then inheritance
-stops and the accessor will behave like a normal accessor.
+If the method returns C<undef>, then inheritance stops and the accessor
+will behave like a normal accessor.  (Normally, C<parent_link> will be
+the name of an attribute accessor method, but it doesn't have to be.)
 
 Sometimes it's not convenient for the parent object to have a separate
 method for each attribute that a child object might want to inherit.
@@ -199,7 +200,7 @@ method.  In that case, no parameters are passed to the parent method.
 
 =head2 parent_link
 
-This is the name of the attribute which links to the object's parent.
+This is the name of the method to call to retrieve the object's parent.
 The default is C<parent>.
 
 =head1 CONFIGURATION AND ENVIRONMENT
@@ -241,7 +242,7 @@ or through the web interface at
 L<http://rt.cpan.org/Public/Bug/Report.html?Queue=MooseX-AttributeTree>
 
 You can follow or contribute to MooseX-AttributeTree's development at
-L<< http://github.com/madsen/moosex-attributetree >>.
+git://github.com/madsen/moosex-attributetree.git.
 
 =head1 ACKNOWLEDGMENTS
 
