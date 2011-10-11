@@ -2,31 +2,32 @@
 use strict;
 use warnings;
 
-BEGIN { require 5.8.0; }
+use 5.008000;
 
-use ExtUtils::MakeMaker 6.31;
+use ExtUtils::MakeMaker 6.30;
 
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'Inherit attribute values like HTML+CSS does',
-  'AUTHOR' => 'Christopher J. Madsen <perl@cjmweb.net>',
-  'BUILD_REQUIRES' => {
-    'Test::More' => '0.88'
+  "ABSTRACT" => "Inherit attribute values like HTML+CSS does",
+  "AUTHOR" => "Christopher J. Madsen <perl\@cjmweb.net>",
+  "BUILD_REQUIRES" => {
+    "Test::More" => "0.88"
   },
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.31'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
   },
-  'DISTNAME' => 'MooseX-AttributeTree',
-  'EXE_FILES' => [],
-  'LICENSE' => 'perl',
-  'NAME' => 'MooseX::AttributeTree',
-  'PREREQ_PM' => {
-    'MooseX::Role::Parameterized' => '0'
+  "DISTNAME" => "MooseX-AttributeTree",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "MooseX::AttributeTree",
+  "PREREQ_PM" => {
+    "Moose" => "2.0205",
+    "MooseX::Role::Parameterized" => 0
   },
-  'VERSION' => '0.03',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "0.04",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 

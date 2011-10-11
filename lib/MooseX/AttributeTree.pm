@@ -17,7 +17,8 @@ package MooseX::AttributeTree;
 # ABSTRACT: Inherit attribute values like HTML+CSS does
 #---------------------------------------------------------------------
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
+use 5.008;
 
 
 use MooseX::Role::Parameterized;
@@ -41,6 +42,9 @@ parameter qw(default
   isa     Maybe[Value|CodeRef]
 );
 
+# Moose can't cache roles with parameters, so we'll do it ourselves:
+our %cache;
+
 # Hook accessor_metaclass to apply the MooseX::AttributeTree::Accessor role:
 role {
   my $parent_link  = $_[0]->parent_link;
@@ -51,14 +55,20 @@ role {
     my $orig = shift;
     my $self = shift;
 
-    return Moose::Meta::Class->create_anon_class(
-      superclasses => [ $self->$orig(@_) ],
+    my @superclasses = $self->$orig(@_);
+
+    my $key = join(';', join(',', @superclasses),
+                   $parent_link, $fetch_method || '');
+    $key .= ";$default" if defined $default;
+
+    ($cache{$key} ||= Moose::Meta::Class->create_anon_class(
+      superclasses => \@superclasses,
       roles => [ 'MooseX::AttributeTree::Accessor',
                  { parent_link  => $parent_link,
                    fetch_method => $fetch_method,
                    default      => $default } ],
-      cache => 1
-    )->name
+      cache => 0
+    ))->name;
   };
 };
 
@@ -81,9 +91,9 @@ MooseX::AttributeTree - Inherit attribute values like HTML+CSS does
 
 =head1 VERSION
 
-This document describes version 0.03 of
-MooseX::AttributeTree, released November 14, 2010
-as part of MooseX-AttributeTree version 0.03.
+This document describes version 0.04 of
+MooseX::AttributeTree, released October 11, 2011
+as part of MooseX-AttributeTree version 0.04.
 
 =head1 SYNOPSIS
 
@@ -242,7 +252,7 @@ or through the web interface at
 L<http://rt.cpan.org/Public/Bug/Report.html?Queue=MooseX-AttributeTree>
 
 You can follow or contribute to MooseX-AttributeTree's development at
-git://github.com/madsen/moosex-attributetree.git.
+L<< http://github.com/madsen/moosex-attributetree >>.
 
 =head1 ACKNOWLEDGMENTS
 
@@ -252,7 +262,7 @@ L<http://www.mitsi.com>, who sponsored its development.
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Christopher J. Madsen.
+This software is copyright (c) 2011 by Christopher J. Madsen.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

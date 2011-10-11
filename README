@@ -1,4 +1,4 @@
-MooseX-AttributeTree version 0.03, released November 14, 2010
+MooseX-AttributeTree version 0.04, released October 11, 2011
 
 This module provides inheritance of attribute values based on object
 relationhips (instead of class relationhips), similar to how CSS
@@ -15,35 +15,37 @@ inherited).
 
 INSTALLATION
 
-To install this module type the following:
+To install this module, run the following commands:
 
-   perl Makefile.PL
-   make
-   make test
-   make install
+	perl Makefile.PL
+	make
+	make test
+	make install
 
 
 
 DEPENDENCIES
 
-This module requires the MooseX::Role::Parameterized module from CPAN.
+  Package                      Minimum Version
+  ---------------------------- ---------------
+  perl                          5.8.0
+  Moose                         2.0205
+  MooseX::Role::Parameterized
 
 
 
 CHANGES
-    Here's what's new in version 0.03 of MooseX-AttributeTree:
+    Here's what's new in version 0.04 of MooseX-AttributeTree:
     (See the file "Changes" for the full revision history.)
 
-	- Generated accessor methods are faster
-	- parent_link is now a method name, not necessarily an attribute
+	- Maintain internal class cache because Moose can't cache
+	  parameterized roles
 
 
 
 COPYRIGHT AND LICENCE
 
-Copyright 2009 Christopher J. Madsen.
+This software is copyright (c) 2011 by Christopher J. Madsen.
 
-This work is published under the same licensing terms as Perl itself, which may
-be found at http://www.perl.org.  The existance of this work does not imply that
-it is fit for any purpose implied by the code or accompanying documentation.
-There is no warranty whatsoever.  Use at your own risk.
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
