@@ -108,8 +108,8 @@ MooseX::AttributeTree::Accessor - Moose accessor role for inheritance through th
 =head1 VERSION
 
 This document describes version 0.03 of
-MooseX::AttributeTree::Accessor, released October 11, 2011
-as part of MooseX-AttributeTree version 0.04.
+MooseX::AttributeTree::Accessor, released October 5, 2013
+as part of MooseX-AttributeTree version 0.05.
 
 =head1 DESCRIPTION
 
@@ -120,17 +120,17 @@ the C<TreeInherit> trait.  See L<MooseX::AttributeTree> for details.
 
 Christopher J. Madsen  S<C<< <perl AT cjmweb.net> >>>
 
-Please report any bugs or feature requests to
-S<C<< <bug-MooseX-AttributeTree AT rt.cpan.org> >>>,
+Please report any bugs or feature requests
+to S<C<< <bug-MooseX-AttributeTree AT rt.cpan.org> >>>
 or through the web interface at
-L<http://rt.cpan.org/Public/Bug/Report.html?Queue=MooseX-AttributeTree>
+L<< http://rt.cpan.org/Public/Bug/Report.html?Queue=MooseX-AttributeTree >>.
 
 You can follow or contribute to MooseX-AttributeTree's development at
 L<< http://github.com/madsen/moosex-attributetree >>.
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Christopher J. Madsen.
+This software is copyright (c) 2013 by Christopher J. Madsen.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

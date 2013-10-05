@@ -1,4 +1,4 @@
-MooseX-AttributeTree version 0.04, released October 11, 2011
+MooseX-AttributeTree version 0.05, released October 5, 2013
 
 This module provides inheritance of attribute values based on object
 relationhips (instead of class relationhips), similar to how CSS
@@ -35,17 +35,18 @@ DEPENDENCIES
 
 
 CHANGES
-    Here's what's new in version 0.04 of MooseX-AttributeTree:
+    Here's what's new in version 0.05 of MooseX-AttributeTree:
     (See the file "Changes" for the full revision history.)
 
-	- Maintain internal class cache because Moose can't cache
-	  parameterized roles
+	- Verify minimum Moose version at runtime
+	- Release tests are now located in xt/ so they don't run
+	  during normal testing
 
 
 
 COPYRIGHT AND LICENCE
 
-This software is copyright (c) 2011 by Christopher J. Madsen.
+This software is copyright (c) 2013 by Christopher J. Madsen.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
